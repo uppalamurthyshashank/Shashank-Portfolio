@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Portfolio - Shashank Uppalamurthy</title>
+
+  <!-- ScrollReveal (animations) -->
+  <script src="https://unpkg.com/scrollreveal"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#0b1022; --bg-2:#0f172a; --card:#0c1328; --text:#e7ecf6; --muted:#9fb0c9;
+      --brand:#22d3ee; --brand-2:#60a5fa; --accent:#34d399;
+      --border:#1e2a44; --ring: rgba(34,211,238,.35); --shadow: 0 10px 30px rgba(2,8,23,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      /* Full page background image with a soft dark overlay for readability */
+      background:
+        radial-gradient(1200px 800px at -10% -20%, rgba(14,26,56,.85) 0%, rgba(14,26,56,0) 55%),
+        radial-gradient(900px 700px at 110% 10%, rgba(14,36,63,.85) 0%, rgba(14,36,63,0) 50%),
+        linear-gradient(180deg, rgba(11,16,34,.92) 0%, rgba(15,23,42,.92) 100%),
+        url('assets/backgroundimage.jpg') center / cover fixed no-repeat;
+      color:var(--text);scroll-behavior:smooth
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+
+    /* Header */
+    header{
+      position:sticky;top:0;z-index:50;
+      background:rgba(7,12,30,.55);
+      border-bottom:1px solid var(--border);
+      backdrop-filter:saturate(140%) blur(14px)
+    }
+    .head-wrap{display:flex;flex-direction:column;gap:6px;padding:12px 0}
+    .masthead{display:flex;align-items:center;gap:12px}
+    .dot{
+      width:9px;height:9px;border-radius:50%;
+      background:radial-gradient(closest-side, var(--brand), var(--brand-2));
+      box-shadow:0 0 10px rgba(34,211,238,.8), 0 0 18px rgba(96,165,250,.45)
+    }
+    .site-h1{margin:0;font-size:1.22rem;font-weight:800;letter-spacing:.2px}
+    .nav-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .nav-title{color:var(--muted);font-weight:700;letter-spacing:.35px}
+
+    nav{display:flex;gap:2px;flex-wrap:wrap}
+    nav a{
+      position:relative;padding:10px 12px;border-radius:10px;color:var(--muted);font-weight:600
+    }
+    nav a:hover, nav a.active{color:#fff;background:rgba(96,165,250,.10)}
+    nav a.active::after{
+      content:"";position:absolute;left:12px;right:12px;bottom:6px;height:2px;
+      background:linear-gradient(90deg,var(--brand),var(--brand-2));
+      border-radius:999px;box-shadow:0 0 8px rgba(96,165,250,.6)
+    }
+
+    /* Sections */
+    .section{padding:88px 0;border-bottom:1px solid var(--border)}
+    .section h2{display:flex;align-items:center;gap:12px;font-size:1.38rem;margin:0 0 18px}
+    .section h2 .bar{width:42px;height:10px;border-radius:999px;background:linear-gradient(90deg,var(--brand),var(--brand-2));box-shadow:0 0 14px rgba(96,165,250,.55)}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+    .hero-photo{display:flex;justify-content:center}
+    .profile{width:148px;height:148px;border-radius:50%;border:1px solid #1a2746;background:#0a1022;object-fit:cover;box-shadow:0 12px 36px rgba(34,211,238,.18),0 0 0 6px rgba(34,211,238,.05),0 0 0 12px rgba(96,165,250,.04)}
+    .title{font-size:clamp(2rem,1.2rem + 2vw,2.6rem);line-height:1.12;margin:0 0 10px}
+    .subtitle{color:var(--muted);margin:0 0 18px;font-weight:500}
+    .badge{display:inline-block;padding:8px 12px;border-radius:999px;font-weight:700;font-size:.9rem;background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(96,165,250,.12));border:1px solid rgba(96,165,250,.22);color:#dbeafe;box-shadow: inset 0 0 14px rgba(96,165,250,.08)}
+    .socials{display:flex;gap:12px;margin-top:18px}
+    .social-button{width:44px;height:44px;border-radius:12px;border:1px solid var(--border);background:linear-gradient(180deg,#0b1222,#0f172a);display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), var(--shadow)}
+    .social-button:hover{transform:translateY(-2px);border-color:#2c3a64;box-shadow:0 10px 26px rgba(2,8,23,.48), 0 0 12px rgba(34,211,238,.25)}
+    .social-icon{width:22px;height:22px;border-radius:6px;object-fit:cover}
+
+    /* Cards / grid */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    @media (max-width:980px){.hero{grid-template-columns:1fr}.grid-3,.grid-2{grid-template-columns:1fr}}
+    .card{border:1px solid var(--border);border-radius:22px;background:linear-gradient(180deg, rgba(12,19,40,.95), rgba(10,16,34,.95)), radial-gradient(600px 400px at 110% -20%, rgba(34,211,238,.06), transparent 60%);box-shadow:var(--shadow);padding:20px}
+    .card:hover{border-color:#2a3a5f;box-shadow:0 16px 40px rgba(2,8,23,.55)}
+    .muted{color:var(--muted)}
+    .lead{font-size:1.05rem;color:#dfe8fb}
+
+    /* Helpful tiny styles for neat lists */
+    .about-list{padding-left:20px;margin:0}
+    .about-list li{margin:8px 0}
+
+    /* Chips */
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(15,23,42,.7);border:1px solid var(--border);color:#cfe1ff;font-weight:700;font-size:.86rem}
+
+    /* Timeline */
+    .timeline{position:relative;margin:6px 0 0;padding-left:28px}
+    .timeline:before{content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(180deg, rgba(34,211,238,.5), rgba(96,165,250,.2));box-shadow:0 0 12px rgba(34,211,238,.2)}
+    .t-item{position:relative;margin:0 0 18px}
+    .t-item:before{content:"";position:absolute;left:-.5px;top:18px;width:11px;height:11px;border-radius:50%;background:radial-gradient(closest-side, var(--brand), var(--brand-2));box-shadow:0 0 12px rgba(34,211,238,.8)}
+    .t-head{display:flex;align-items:center;gap:12px}
+    .logo{width:30px;height:30px;object-fit:contain;border-radius:8px;border:1px solid #1a2746;background:#0b1222;box-shadow:0 2px 8px rgba(2,8,23,.35)}
+    .t-meta{color:#a7b6cf;font-size:.92rem}
+
+    /* Accordion */
+    .accordion .acc-head{width:100%;display:flex;align-items:center;gap:12px;background:rgba(10,16,34,.6);border:1px solid var(--border);border-radius:14px;padding:12px 14px;color:inherit;cursor:pointer}
+    .accordion .acc-title{flex:1}
+    .accordion .acc-icon{font-weight:900;opacity:.75;transition:transform .2s ease}
+    .accordion .acc-panel{max-height:0;overflow:hidden;transition:max-height .28s ease, padding .25s ease}
+    .accordion .acc-dot{width:9px;height:9px;border-radius:50%;background:radial-gradient(closest-side, var(--brand), var(--brand-2))}
+    .accordion .open .acc-head{border-color:#2c3a5f;background:linear-gradient(180deg, rgba(12,19,40,.85), rgba(11,18,36,.85))}
+    .accordion .open .acc-icon{transform:rotate(45deg)}
+    .accordion .open .acc-panel{max-height:1200px;padding:10px 2px 6px}
+    .acc-panel ul{margin:8px 0 0 20px}
+    .acc-panel li{margin:6px 0}
+
+    /* Projects */
+    .filters{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 16px}
+    .filter{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0b1222;cursor:pointer;font-weight:800;color:#dbeafe}
+    .filter.active{outline:2px solid var(--ring);box-shadow:0 0 0 4px rgba(34,211,238,.08)}
+    .project{display:flex;flex-direction:column;gap:10px}
+    .project a.cta{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid #1f3a5f;background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(96,165,250,.08));color:#e0f2fe;font-weight:800}
+
+    /* Certifications (with preview) */
+    .cert-list{display:flex;flex-direction:column;gap:10px}
+    .cert-row{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--border);background:#0b1222;border-radius:12px;padding:10px 12px}
+    .cert-title{display:flex;align-items:center;gap:10px;font-weight:700}
+    .cert-dot{width:8px;height:8px;border-radius:50%;background:radial-gradient(closest-side, var(--brand), var(--brand-2))}
+    .cert-actions{display:flex;gap:8px}
+    .cert-btn{padding:8px 12px;border-radius:10px;border:1px solid #1f3a5f;background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(96,165,250,.08));color:#e0f2fe;font-weight:800;cursor:pointer}
+
+    .viewer.hidden{display:none}
+    .viewer{position:fixed;inset:0;z-index:100}
+    .viewer-bg{position:absolute;inset:0;background:rgba(4,8,20,.7);backdrop-filter:blur(3px)}
+    .viewer-content{position:absolute;inset:5%;background:linear-gradient(180deg,#0b1222,#0f172a);border:1px solid var(--border);border-radius:18px;box-shadow:0 30px 80px rgba(2,8,23,.7);display:flex;flex-direction:column;overflow:hidden}
+    .viewer-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px}
+    .viewer-title{font-weight:800}
+    .viewer-close{background:#142034;border:1px solid var(--border);color:#e5e7eb;border-radius:10px;padding:6px 10px;cursor:pointer;font-size:16px}
+    .viewer iframe{flex:1;border:0;border-top:1px solid var(--border)}
+
+    /* Contact */
+    form{display:grid;gap:14px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media (max-width:700px){.form-grid{grid-template-columns:1fr}}
+    label{font-size:.9rem;color:#cfe1ff;margin-bottom:6px;display:inline-block}
+    input,textarea{width:100%;background:#0b1222;border:1px solid var(--border);border-radius:12px;padding:12px 14px;color:#e5e7eb;outline:none}
+    input:focus,textarea:focus{border-color:#2a3a5a;box-shadow:0 0 0 4px rgba(96,165,250,.08)}
+    button[type="submit"]{width:max-content;padding:12px 16px;border-radius:12px;border:1px solid #1f3a5f;background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(96,165,250,.12));color:#e0f2fe;font-weight:900;cursor:pointer}
+    .contact-meta{display:flex;align-items:center;gap:14px;margin-top:10px;color:var(--muted)}
+    .contact-meta a{color:#e0f2fe;font-weight:700}
+
+    /* Footer */
+    footer{padding:28px 0;color:var(--muted);text-align:center}
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container head-wrap">
+      <div class="masthead">
+        <h1 class="site-h1">My Portfolio - Shashank Uppalamurthy</h1>
+      </div>
+      <div class="nav-row">
+        <nav id="nav">
+          <a href="#home" class="active">Home</a>
+          <a href="#about">About</a>
+          <a href="#skills">Skills</a>
+          <a href="#education">Education</a>
+          <a href="#experience">Experience</a>
+          <a href="#projects">Projects</a>
+          <a href="#certs">Certifications</a>
+          <a href="#publications">Publications</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Home / Hero -->
+  <section id="home" class="section">
+    <div class="container hero">
+      <div>
+        <h1>Associate Engineer @ Strategic Systems Inc</h1>
+        <h2 class="title">Data, AI & Automation Turning Ideas into Real Time Products.</h2>
+        <p class="subtitle">
+          Based in the United States. Master’s in Computer Science. Hands-on with ML models, data pipelines,Snowflake, and interactive apps.
+        </p>
+        <div class="socials">
+          <a class="social-button" target="_blank" href="https://www.linkedin.com/in/shashank-uppalamurthy-73a7541b4" aria-label="LinkedIn">
+            <img class="social-icon" src="assets/linkedln.jpeg" alt="LinkedIn" />
+          </a>
+          <a class="social-button" target="_blank" href="https://www.instagram.com/Simon_Shashank" aria-label="Instagram">
+            <img class="social-icon" src="assets/instagram.jpeg" alt="Instagram" />
+          </a>
+          <a class="social-button" target="_blank" href="https://github.com/uppalamurthyshashank" aria-label="GitHub">
+            <img class="social-icon" src="assets/github.jpeg" alt="GitHub" />
+          </a>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <img class="profile" src="assets/profile.jpg" alt="Shashank profile" />
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2>About</h2>
+      <div class="card">
+        <ul class="about-list lead">
+          <li>Associate Engineer with a strong academic background in Computer Science and practical experience across software development, data engineering, and UI/UX design.</li>
+          <li>Proficient in building scalable, data-driven solutions using Python, SQL, and modern web technologies, and skilled in creating user-friendly digital experiences via design and website management tools.</li>
+          <li>Recently advanced expertise in CRM platforms and digital marketing technologies to integrate technical solutions with business growth strategies.</li>
+          <li>Known for adaptability, analytical problem-solving, and aligning technology with organizational objectives to deliver measurable results.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="section">
+    <div class="container">
+      <h2>Skills</h2>
+
+    <div class="grid-3">
+      <!-- Programming Languages -->
+      <div class="card">
+        <h3>Programming Languages</h3>
+        <div class="chips">
+          <span class="chip">SQL</span><span class="chip">Python</span><span class="chip">Shell Scripting</span>
+          <span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span>
+        </div>
+      </div>
+
+      <!-- Packages -->
+      <div class="card">
+        <h3>Packages</h3>
+        <div class="chips">
+          <span class="chip">PyTorch</span><span class="chip">Pandas</span><span class="chip">Scikit-learn</span>
+          <span class="chip">NLTK</span><span class="chip">Flask</span><span class="chip">TensorFlow</span>
+          <span class="chip">Matplotlib</span><span class="chip">Seaborn</span><span class="chip">NumPy</span>
+          <span class="chip">Google Colab</span><span class="chip">Jupyter</span>
+        </div>
+      </div>
+
+      <!-- Databases -->
+      <div class="card">
+        <h3>Database Technologies</h3>
+        <div class="chips">
+          <span class="chip">MySQL</span><span class="chip">PostgreSQL</span><span class="chip">Oracle</span>
+          <span class="chip">SQL Server</span><span class="chip">Aurora</span><span class="chip">Snowflake</span>
+        </div>
+      </div>
+
+      <!-- Design & Web Tools -->
+      <div class="card">
+        <h3>Design & Web Tools</h3>
+        <div class="chips">
+          <span class="chip">UI/UX Design</span><span class="chip">Figma</span><span class="chip">Canva</span>
+          <span class="chip">Wix</span><span class="chip">Webflow</span><span class="chip">Git</span>
+          <span class="chip">JIRA</span><span class="chip">Tableau</span><span class="chip">Power BI</span>
+        </div>
+      </div>
+
+      <!-- Cloud Services -->
+      <div class="card">
+        <h3>Cloud Services</h3>
+        <div class="chips">
+          <span class="chip">S3</span><span class="chip">Redshift</span><span class="chip">Glue</span>
+          <span class="chip">CloudWatch</span><span class="chip">SageMaker</span><span class="chip">Machine Learning</span>
+          <span class="chip">EMR</span><span class="chip">IAM</span><span class="chip">VPC</span>
+          <span class="chip">AutoML</span><span class="chip">Kubeflow</span>
+        </div>
+      </div>
+
+      <!-- Networking -->
+      <div class="card">
+        <h3>Networking</h3>
+        <div class="chips">
+          <span class="chip">TCP/IP</span><span class="chip">DNS</span><span class="chip">HTTP/S</span>
+          <span class="chip">Firewalls</span><span class="chip">LAN/WAN</span>
+          <span class="chip">Traceroute</span><span class="chip">cURL Tools</span><span class="chip">VMware</span>
+        </div>
+      </div>
+
+      <!-- Marketing Tech -->
+      <div class="card">
+        <h3>Marketing Technologies</h3>
+        <div class="chips">
+          <span class="chip">HubSpot</span><span class="chip">CRM</span><span class="chip">LinkedIn Ads</span>
+          <span class="chip">Email Automation</span><span class="chip">Campaign Analytics</span>
+        </div>
+      </div>
+
+      <!-- Operating Systems -->
+      <div class="card">
+        <h3>Operating Systems</h3>
+        <div class="chips">
+          <span class="chip">Windows</span><span class="chip">Linux</span><span class="chip">OS</span>
+        </div>
+      </div>
+
+      <!-- AI Technologies -->
+      <div class="card">
+        <h3>AI Technologies</h3>
+        <div class="chips">
+          <span class="chip">Random Forest</span><span class="chip">Streamlit Application</span>
+          <span class="chip">SVM</span><span class="chip">LLM</span><span class="chip">NLP</span>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education" class="section">
+    <div class="container">
+      <h2>Education</h2>
+      <div class="card">
+        <div class="timeline">
+          <div class="t-item">
+            <div class="t-head">
+              <img class="logo" src="assets/Kent-State-University-Seal-Logo.png" alt="Kent State University" />
+              <div>
+                <strong>Kent State University - M.S. Computer Science</strong>
+                <div class="t-meta">Aug 2023 – Dec 2024</div>
+              </div>
+            </div>
+          </div>
+          <div class="t-item">
+            <div class="t-head">
+              <img class="logo" src="assets/anna university.jpeg" alt="Anna University" />
+              <div>
+                <strong>Anna University - B.E. Computer Science & Engineering</strong>
+                <div class="t-meta">Aug 2019 – May 2023</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience" class="section">
+    <div class="container">
+      <h2>Experience</h2>
+      <div class="card">
+        <div class="timeline accordion" id="expList">
+          <!-- Strategic Systems -->
+          <div class="t-item">
+            <button class="acc-head">
+              <img class="logo" src="assets/strategicsystems.jpeg" alt="Strategic Systems Inc" />
+              <span class="acc-title"><strong>Strategic Systems Inc</strong></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-panel">
+              <div class="t-meta"><em>Associate Engineer</em> • March 2025 – Present</div>
+              <ul>
+                <li><strong>Data & Model Development:</strong> Collect, clean, and process data (feature engineering/normalization) in Python & Snowflake. Build ML models with scikit-learn/TensorFlow/PyTorch; run experiments and evaluate with accuracy, precision, recall.</li>
+                <li><strong>Deployment & MLOps:</strong> Containerize with Docker and deploy scalable Streamlit apps integrated with existing systems; monitor for data/concept drift and run automated Python retraining pipelines.</li>
+                <li><strong>Marketing/CRM & UI:</strong> Hands-on with HubSpot and LinkedIn Marketing Strategy/Ads. Contribute to UI/UX and front-end work (HTML/CSS/JS; Figma/Canva; Wix/Webflow).</li>
+                <li><strong>Documentation:</strong> Maintain detailed docs for data sources, model architectures, and training steps for team reference and compliance.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Pandata Group -->
+          <div class="t-item">
+            <button class="acc-head">
+              <img class="logo" src="assets/pandata.jpeg" alt="Pandata Group" />
+              <span class="acc-title"><strong>Pandata Group</strong></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-panel">
+              <div class="t-meta"><em>Machine Learning Engineer</em> • May 2024 – July 2024</div>
+              <ul>
+                <li><strong>Low-Latency ML:</strong> Developed real-time models using Python, TensorFlow, PyTorch, and scikit-learn to solve business challenges.</li>
+                <li><strong>Data Pipelines:</strong> Built Pandas/NumPy preprocessing pipelines, reducing cleaning time by <strong>99%</strong>.</li>
+                <li><strong>Distributed Systems:</strong> Troubleshot memory/network issues in Spark streaming on AWS EMR; improved stability and performance.</li>
+                <li><strong>Algorithms & Insights:</strong> Designed supervised/unsupervised solutions; presented results with Matplotlib/Seaborn for decision-making.</li>
+                <li><strong>Predictive Analytics:</strong> Delivered regression/classification/time-series models (Linear Reg., Random Forests, ARIMA).</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Stratsol Software Systems -->
+          <div class="t-item">
+            <button class="acc-head">
+              <img class="logo" src="assets/stratsol.jpeg" alt="Stratsol Software Systems" />
+              <span class="acc-title"><strong>Stratsol Software Systems</strong></span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-panel">
+              <div class="t-meta"><em>Associate Machine Learning Engineer</em> • Nov 2022 – June 2023</div>
+              <ul>
+                <li><strong>Analytics:</strong> Executed and optimized SQL in Jupyter to analyze data and streamline workflows; aligned with engineering and marketing goals.</li>
+                <li><strong>Data Engineering:</strong> Built ETL pipelines into Redshift; wrote secure on-prem SQL scripts; managed cross-account S3 permissions.</li>
+                <li><strong>Governance & Performance:</strong> Partitioned historical tables; controlled access via Athena workgroups; tuned Spark jobs on AWS EMR.</li>
+                <li><strong>NLP:</strong> Contributed to sentiment analysis and text classification using TF-IDF and embeddings on financial documents.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section">
+    <div class="container">
+      <h2>Projects</h2>
+      <div class="filters" id="projectFilters">
+        <button class="filter active" data-tag="all">All</button>
+        <button class="filter" data-tag="ml">ML</button>
+        <button class="filter" data-tag="analytics">Analytics</button>
+        <button class="filter" data-tag="dashboard">Dashboard</button>
+      </div>
+      <div class="grid-3" id="projectGrid">
+        <div class="card project" data-tags="ml analytics">
+          <h3>Kidney Creatinine Analysis</h3>
+          <p class="muted">Analyzed kidney function from creatinine levels using stats + ML.</p>
+          <a class="cta" target="_blank" href="https://github.com/uppalamurthyshashank/PDM-Project">View Repository ↗</a>
+        </div>
+        <div class="card project" data-tags="ml analytics">
+          <h3>Heart Attack Risk Prediction</h3>
+          <p class="muted">Classification models to predict heart attack risk from patient health records.</p>
+          <a class="cta" target="_blank" href="https://github.com/uppalamurthyshashank/DMT-Project">View Repository ↗</a>
+        </div>
+        <div class="card project" data-tags="dashboard analytics">
+          <h3>Kent State Attendance Dashboard</h3>
+          <p class="muted">Interactive dashboard for monitoring student attendance metrics.</p>
+          <a class="cta" target="_blank" href="https://github.com/ganasai88/Capstone-Project--Fall-2024--Team-Delta">View Repository ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certifications (single merged list) -->
+  <section id="certs" class="section">
+    <div class="container">
+      <h2>Certifications</h2>
+
+      <div class="card">
+        <div class="cert-list">
+          <div class="cert-row">
+            <div class="cert-title"><span class="cert-dot"></span> Linkdeln Marketing Strategy Certification</div>
+            <div class="cert-actions">
+              <button class="cert-btn" data-src="assets/Linkdeln%20Marketing%20Strategy%20Certification.pdf">Preview</button>
+            </div>
+          </div>
+          <div class="cert-row">
+            <div class="cert-title"><span class="cert-dot"></span> HubSpot Inbound Sales</div>
+            <div class="cert-actions">
+              <button class="cert-btn" data-src="assets/HubSpot%20Inbound%20Sales.pdf">Preview</button>
+            </div>
+          </div>
+          <div class="cert-row">
+            <div class="cert-title"><span class="cert-dot"></span> Hubspot Reporting Certification</div>
+            <div class="cert-actions">
+              <button class="cert-btn" data-src="assets/Hubspot%20Reporting%20Certification.pdf">Preview</button>
+            </div>
+          </div>
+          <div class="cert-row">
+            <div class="cert-title"><span class="cert-dot"></span> Hubspot Sales Hub Software</div>
+            <div class="cert-actions">
+              <button class="cert-btn" data-src="assets/Hubspot%20Sales%20Hub%20Software.pdf">Preview</button>
+            </div>
+          </div>
+        </div>
+        <p class="muted" style="margin-top:10px">Click <b>Preview</b> to view each certificate inside the page.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal viewer -->
+  <div id="viewer" class="viewer hidden" aria-hidden="true">
+    <div class="viewer-bg"></div>
+    <div class="viewer-content" role="dialog" aria-modal="true" aria-label="Certificate Viewer">
+      <div class="viewer-head">
+        <div class="viewer-title" id="viewerTitle">Certificate</div>
+        <button class="viewer-close" id="viewerClose" aria-label="Close">Close</button>
+      </div>
+      <iframe id="viewerFrame" src="" title="Certificate"></iframe>
+    </div>
+  </div>
+
+  <!-- Publications -->
+  <section id="publications" class="section">
+    <div class="container">
+      <h2>Publications</h2>
+      <div class="card">
+        <div class="pub" style="display:flex;align-items:center;gap:14px">
+          <img class="logo" src="assets/ijrar.jpeg" alt="IJRAR" />
+          <div>
+            <strong>SMART IoT USING AGRICULTURE</strong>
+            <div class="muted">IJRAR • Research Paper</div>
+            <div style="margin-top:8px">
+              <a class="project cta" style="border-color:#2a3a5f" target="_blank" href="https://ijrar.org/viewfull.php?&p_id=IJRAR22B2286">View Publication ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>Contact</h2>
+      <div class="card">
+        <form action="https://formspree.io/f/mqaqejob" method="POST">
+          <div class="form-grid">
+            <div>
+              <label for="name">Your Name</label>
+              <input id="name" type="text" name="name" placeholder="e.g., Alex Johnson" required />
+            </div>
+            <div>
+              <label for="email">Your Email</label>
+              <input id="email" type="email" name="email" placeholder="you@domain.com" required />
+            </div>
+          </div>
+          <div>
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" rows="6" placeholder="How can I help you?" required></textarea>
+          </div>
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© <span id="year"></span> Shashank Uppalamurthy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // nav active state on scroll
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll("nav a");
+    function setActiveLink(){
+      let cur = "";
+      sections.forEach(sec=>{
+        const top = window.scrollY;
+        const offset = sec.offsetTop - 140;
+        const height = sec.offsetHeight;
+        if(top >= offset && top < offset + height){ cur = sec.id; }
+      });
+      navLinks.forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#" + cur));
+    }
+    window.addEventListener("scroll", setActiveLink); setActiveLink();
+
+    // Accordion behavior (Experience only—certs are a flat list)
+    document.querySelectorAll(".accordion .acc-head").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const item = btn.parentElement;
+        const open = item.classList.contains("open");
+        item.parentElement.querySelectorAll(":scope > .t-item, :scope > .card").forEach(sib=>sib.classList.remove("open"));
+        if(!open) item.classList.add("open");
+        else item.classList.remove("open");
+      });
+    });
+
+    // Project filters
+    const filters = document.getElementById("projectFilters");
+    if(filters){
+      const cards = Array.from(document.querySelectorAll("#projectGrid .project"));
+      filters.addEventListener("click",(e)=>{
+        const btn = e.target.closest(".filter"); if(!btn) return;
+        document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        const tag = btn.dataset.tag;
+        cards.forEach(card=>{
+          const matches = tag==="all" || card.dataset.tags.includes(tag);
+          card.style.display = matches ? "flex" : "none";
+        });
+      });
+    }
+
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // ScrollReveal
+    const revealOpts = { distance: "24px", duration: 700, easing: "ease-out", origin: "bottom", interval: 80 };
+    ScrollReveal().reveal(".section .card, .hero .badge, .hero .title, .hero .subtitle, .hero .socials, .profile", revealOpts);
+
+    // Certificate modal viewer
+    const viewer = document.getElementById("viewer");
+    const frame = document.getElementById("viewerFrame");
+    const title = document.getElementById("viewerTitle");
+    const closeBtn = document.getElementById("viewerClose");
+    document.querySelectorAll(".cert-btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const src = btn.dataset.src;
+        const row = btn.closest(".cert-row").querySelector(".cert-title").innerText.trim();
+        title.textContent = row;
+        frame.src = src; // filenames are URL-encoded above
+        viewer.classList.remove("hidden");
+        viewer.setAttribute("aria-hidden","false");
+      });
+    });
+    function closeViewer(){
+      frame.src = "";
+      viewer.classList.add("hidden");
+      viewer.setAttribute("aria-hidden","true");
+    }
+    closeBtn.addEventListener("click", closeViewer);
+    viewer.addEventListener("click",(e)=>{ if(e.target.classList.contains("viewer-bg")) closeViewer(); });
+  </script>
+</body>
+</html>
