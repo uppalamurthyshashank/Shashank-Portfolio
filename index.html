@@ -29,35 +29,70 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
-    /* ===== BASE THEME (single, no toggle) ===== */
+    /* ===== DARK THEME ===== */
     :root{
       --bg:#0b1022; --bg-2:#0f172a; --card:#0c1328; --text:#e7ecf6; --muted:#9fb0c9;
       --brand:#22d3ee; --brand-2:#60a5fa; --accent:#34d399;
       --border:#1e2a44; --ring: rgba(34,211,238,.35); --shadow: 0 10px 30px rgba(2,8,23,.35);
-      --overlay: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.12), transparent 60%),
-                 radial-gradient(900px 600px at 110% 10%, rgba(96,165,250,.12), transparent 55%),
-                 radial-gradient(1200px 700px at 50% 120%, rgba(52,211,153,.10), transparent 60%);
+
+      /* overlay tints */
+      --glowA: #22d3ee22;   /* cyan */
+      --glowB: #60a5fa22;   /* sky */
+      --glowC: #34d39922;   /* green */
     }
 
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);scroll-behavior:smooth;}
 
-    /* ===== Mixed color background (soft gradient + subtle pattern) ===== */
+    /* ===== Background base + animated layers ===== */
     body{
       background:
         linear-gradient(180deg, rgba(11,16,34,.94), rgba(15,23,42,.96)),
-        var(--overlay),
-        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.08) 40%, transparent 41%) repeat,
-        radial-gradient(2px 2px at 70% 80%, rgba(255,255,255,.06) 40%, transparent 41%) repeat,
+        radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.12), transparent 60%),
+        radial-gradient(900px 600px at 110% 10%, rgba(96,165,250,.12), transparent 55%),
+        radial-gradient(1200px 700px at 50% 120%, rgba(52,211,153,.10), transparent 60%),
         #0b1022;
-      background-size:
-        100% 100%,
-        100% 100%,
-        60px 60px,
-        80px 80px,
-        auto;
+      background-size:100% 100%,100% 100%,100% 100%,100% 100%,auto;
       min-height:100vh;
+      position:relative;
+      overflow-x:hidden;
+      isolation:isolate;
     }
+    /* Animated Glow Layer 1 (slow pan) */
+    body::before{
+      content:""; position:fixed; inset:-20vmax; z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(40vmax 30vmax at 15% 20%, var(--glowA), transparent 60%),
+        radial-gradient(36vmax 28vmax at 85% 15%, var(--glowB), transparent 60%),
+        radial-gradient(42vmax 34vmax at 50% 100%, var(--glowC), transparent 65%);
+      filter: blur(28px);
+      animation: panBg 60s linear infinite;
+      opacity:.9;
+    }
+    /* Animated Glow Layer 2 (gentle drifting band) */
+    body::after{
+      content:""; position:fixed; inset:-30vmax; z-index:-3; pointer-events:none;
+      background:
+        conic-gradient(from 180deg at 50% 50%, #60a5fa10, #22d3ee10, #34d39910, #60a5fa10);
+      mix-blend-mode: screen;
+      filter: blur(60px);
+      animation: swirl 90s linear infinite;
+      opacity:.5;
+    }
+    @keyframes panBg{
+      0%   { transform: translate3d(0,0,0) scale(1) }
+      50%  { transform: translate3d(-4vmax,-2vmax,0) scale(1.03) }
+      100% { transform: translate3d(0,0,0) scale(1) }
+    }
+    @keyframes swirl{
+      0%   { transform: rotate(0deg) }
+      100% { transform: rotate(360deg) }
+    }
+    @media (prefers-reduced-motion: reduce){
+      body::before, body::after { animation:none !important }
+    }
+
+    /* Canvas sits under content */
     #bg-canvas{position:fixed;inset:0;z-index:-1;display:block}
 
     a{color:inherit;text-decoration:none}
@@ -129,7 +164,7 @@
     .chips{display:flex;flex-wrap:wrap;gap:10px}
     .chip{padding:8px 12px;border-radius:999px;background:rgba(15,23,42,.7);border:1px solid var(--border);color:#cfe1ff;font-weight:700;font-size:.86rem;transition:transform .2s ease}
 
-    /* ===== Vertical Timelines (Education & Experience) ===== */
+    /* ===== Vertical Timelines ===== */
     .timeline{position:relative;margin:18px 0 0;padding-left:44px}
     .timeline:before{content:"";position:absolute;left:18px;top:0;bottom:0;width:2px;background:linear-gradient(180deg, rgba(34,211,238,.55), rgba(96,165,250,.25));box-shadow:0 0 12px rgba(34,211,238,.22)}
     .t-item{position:relative;margin:0 0 42px;padding-bottom:2px}
@@ -152,7 +187,7 @@
     .project{display:flex;flex-direction:column;gap:10px}
     .project a.cta{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid #1f3a5f;background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(96,165,250,.08));color:#e0f2fe;font-weight:800}
 
-    /* ===== Certifications (text-only) ===== */
+    /* ===== Certifications (text only) ===== */
     .cert-list{display:flex;flex-direction:column;gap:14px}
     .cert-item{border:1px solid var(--border);background:#0b1222;border-radius:12px;padding:14px}
     .cert-name{font-weight:800}
@@ -349,7 +384,6 @@
               <div class="t-title">Kent State University — M.S. Computer Science</div>
               <div class="t-meta">Aug 2023 – Dec 2024 • Kent, Ohio, U.S.A</div>
             </div>
-            
             <div class="t-body">
               <p>Kent State University is a distinguished public research university in the United States, enrolling over 33,000 students across multiple campuses. The Master of Science in Computer Science program combines rigorous theoretical instruction with applied laboratory work and project-based learning.</p>
             </div>        
@@ -381,7 +415,6 @@
               <p>Associate Engineer at Strategic System with expertise in data engineering and machine learning operations. Skilled in developing ETL pipelines using Python and Snowflake, and evaluating machine learning models via metrics such as accuracy, precision, and recall. Experienced in deploying Dockerized Streamlit applications with monitoring and retraining workflows. Proficient in supporting marketing and CRM efforts using HubSpot and LinkedIn Ads, UI/UX design, and maintaining detailed technical documentation.</p>
             </div>
             
-            
             <div class="t-head">
               <img class="logo" src="assets/pandata.jpeg" alt="Pandata Group" loading="lazy" decoding="async" />
               <div class="t-title">Pandata Group — Machine Learning Engineer</div>
@@ -391,7 +424,6 @@
               <p>Machine Learning Engineer at Pandata Group, specializing in real-time modeling using TensorFlow, PyTorch, and scikit-learn for regression, classification, and time-series forecasting. Optimized data preprocessing with Pandas and NumPy, reducing cleaning time by 99%. Debugged AWS EMR streaming workloads and developed visualizations with Matplotlib and Seaborn to support data analysis.</p>
             </div>
 
-            
             <div class="t-head">
               <img class="logo" src="assets/strategicsystems.jpeg" alt="Strategic Systems Inc" loading="lazy" decoding="async" />
               <div class="t-title">Strategic Systems Inc — Associate ML Engineer</div>
@@ -528,7 +560,7 @@
   <!-- Footer -->
   <footer>
     <div class="container">
-      <p>© 2024 Shashank Uppalamurthy. All rights reserved.</p>
+      <p>© 2020 Shashank Uppalamurthy. All rights reserved.</p>
     </div>
   </footer>
 
@@ -541,11 +573,13 @@
   ">↑ Top</button>
 
   <script>
-    // ===== Animated background (stars + soft orbs) with click bursts =====
+    // ===== Animated background (stars + soft orbs + constellations + NEW ribbons + bokeh) =====
     (function(){
       const canvas = document.getElementById('bg-canvas');
       const ctx = canvas.getContext('2d');
       let w, h, dpr, stars = [], orbs = [], bursts = [], motionEnabled = true;
+      let ribbons = [], bokeh = [];
+      let maxLinks = 0, scrollYNorm = 0;
 
       const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
       if(mq.matches) motionEnabled = false;
@@ -556,26 +590,128 @@
         h = canvas.height = Math.floor(innerHeight * dpr);
         canvas.style.width = innerWidth + 'px';
         canvas.style.height = innerHeight + 'px';
+        maxLinks = Math.max(60, Math.min(160, Math.floor((w*h) / (900*900)) * 120));
       };
 
       const init = () => {
-        stars = Array.from({length: 120}, () => ({
+        // Stars
+        const count = Math.floor((w*h) / (42_000));
+        stars = Array.from({length: count}, () => ({
           x: Math.random()*w, y: Math.random()*h, z: Math.random()*0.7 + 0.3,
-          vx: (Math.random()*0.2+0.05) * (Math.random()<0.5?-1:1),
-          vy: (Math.random()*0.2+0.05) * (Math.random()<0.5?-1:1)
+          vx: (Math.random()*0.18+0.04) * (Math.random()<0.5?-1:1),
+          vy: (Math.random()*0.18+0.04) * (Math.random()<0.5?-1:1)
         }));
+
+        // Orbs (soft glows)
         orbs = Array.from({length: 3}, () => ({
-          x: Math.random()*w, y: Math.random()*h, r: Math.random()*200+160,
-          vx: (Math.random()*0.15+0.05) * (Math.random()<0.5?-1:1),
-          vy: (Math.random()*0.15+0.05) * (Math.random()<0.5?-1:1),
-          a: 0.07 + Math.random()*0.08
+          x: Math.random()*w, y: Math.random()*h, r: Math.random()*220+160,
+          vx: (Math.random()*0.12+0.04) * (Math.random()<0.5?-1:1),
+          vy: (Math.random()*0.12+0.04) * (Math.random()<0.5?-1:1),
+          a: 0.05 + Math.random()*0.08
         }));
+
+        // Ribbons (aurora-like, no clouds)
+        const ribCount = Math.min(3, Math.max(2, Math.round(w/1200)+2));
+        ribbons = Array.from({length: ribCount}, (_,i)=>({
+          baseY: h*(0.25 + 0.15*i) + (Math.random()*80 - 40),
+          amp: 30 + Math.random()*40,
+          kx: 0.004 + Math.random()*0.003,
+          speed: 0.3 + Math.random()*0.35,
+          phase: Math.random()*Math.PI*2,
+          width: 2 + Math.random()*2.5,
+          alpha: 0.12 + Math.random()*0.08
+        }));
+
+        // Bokeh glints
+        const bokehCount = Math.floor((w*h)/250000) + 25; // ~25-45
+        bokeh = Array.from({length: bokehCount}, ()=>({
+          x: Math.random()*w, y: Math.random()*h,
+          r: 2 + Math.random()*6,
+          vy: -0.1 - Math.random()*0.2,
+          vx: (Math.random()*0.2 - 0.1),
+          t: Math.random()*Math.PI*2
+        }));
+
         bursts = [];
       };
 
-      const step = () => {
-        if(!motionEnabled) { ctx.clearRect(0,0,w,h); return; }
+      const drawRibbons = (dt) => {
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        ribbons.forEach(r=>{
+          r.phase += r.speed * dt * 0.001;
+          const grad = ctx.createLinearGradient(0, r.baseY-50, w, r.baseY+50);
+          grad.addColorStop(0, `rgba(125,211,252,${r.alpha})`); // sky blue
+          grad.addColorStop(0.5, `rgba(34,211,238,${r.alpha*0.9})`); // cyan
+          grad.addColorStop(1, `rgba(125,211,252,${r.alpha})`);
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = r.width;
+          ctx.beginPath();
+          const step = 18 * dpr;
+          for(let x=0; x<=w; x+=step){
+            const y = r.baseY + (scrollYNorm*12) + Math.sin(r.kx*x + r.phase) * r.amp;
+            if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+          }
+          ctx.stroke();
+        });
+        ctx.restore();
+      };
+
+      const drawBokeh = (dt) => {
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        bokeh.forEach(b=>{
+          b.t += dt*0.002;
+          b.x += b.vx * dpr * (1 + 0.2*Math.sin(b.t));
+          b.y += b.vy * dpr * (1 + 0.2*Math.cos(b.t));
+          if(b.y < -20) { b.y = h + 10; b.x = Math.random()*w; }
+          if(b.x < -20) b.x = w + 10; if(b.x > w+20) b.x = -10;
+
+          const scale = 0.9 + 0.2*Math.sin(b.t*2);
+          const r = b.r * scale;
+          const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, r*2.2);
+          g.addColorStop(0, 'rgba(224,242,254,0.35)');
+          g.addColorStop(0.6, 'rgba(125,211,252,0.18)');
+          g.addColorStop(1, 'rgba(125,211,252,0)');
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(b.x, b.y, r*2.2, 0, Math.PI*2); ctx.fill();
+        });
+        ctx.restore();
+      };
+
+      const drawConstellations = () => {
+        const linkDist = Math.min(w, h) * 0.12;
+        const linkDist2 = linkDist*linkDist;
+        let drawn = 0;
+
+        for(let i=0; i<stars.length; i++){
+          const a = stars[i];
+          for(let j=i+1; j<stars.length; j++){
+            if(drawn > maxLinks) return;
+            const b = stars[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const d2 = dx*dx + dy*dy;
+            if(d2 < linkDist2){
+              const alpha = 0.06 + 0.24*(1 - (d2/linkDist2));
+              ctx.strokeStyle = `rgba(136, 174, 255, ${alpha})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+              drawn++;
+              if(drawn > maxLinks) return;
+            }
+          }
+        }
+      };
+
+      let last = performance.now();
+      const step = (now) => {
+        if(!motionEnabled){ ctx.clearRect(0,0,w,h); return; }
+        const dt = now - last; last = now;
         ctx.clearRect(0,0,w,h);
+
+        // Ribbons behind everything
+        drawRibbons(dt);
 
         // soft orbs
         orbs.forEach(o => {
@@ -585,7 +721,9 @@
           const grd = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
           grd.addColorStop(0, `rgba(34,211,238,${o.a})`);
           grd.addColorStop(1, 'rgba(34,211,238,0)');
+          ctx.globalCompositeOperation = 'lighter';
           ctx.fillStyle = grd; ctx.beginPath(); ctx.arc(o.x, o.y, o.r, 0, Math.PI*2); ctx.fill();
+          ctx.globalCompositeOperation = 'source-over';
         });
 
         // stars
@@ -593,8 +731,16 @@
         stars.forEach(s => {
           s.x += s.vx; s.y += s.vy;
           if(s.x < 0) s.x = w; if(s.x > w) s.x = 0; if(s.y < 0) s.y = h; if(s.y > h) s.y = 0;
-          ctx.globalAlpha = s.z; ctx.fillRect(s.x, s.y, 1.2*dpr, 1.2*dpr); ctx.globalAlpha = 1;
+          ctx.globalAlpha = s.z;
+          ctx.fillRect(s.x, s.y, 1.1*dpr, 1.1*dpr);
         });
+        ctx.globalAlpha = 1;
+
+        // constellation lines
+        drawConstellations();
+
+        // bokeh glints above lines
+        drawBokeh(dt);
 
         // click bursts
         bursts = bursts.filter(b => b.a > 0.02);
@@ -606,22 +752,37 @@
       };
 
       let rafId;
-      const loop = () => { step(); rafId = requestAnimationFrame(loop); };
+      const loop = (t) => { step(t); rafId = requestAnimationFrame(loop); };
 
       const onResize = () => { setSize(); init(); };
       window.addEventListener('resize', onResize, {passive:true});
       canvas.addEventListener('click', (e)=>{
+        if(!motionEnabled) return;
         const rect = canvas.getBoundingClientRect();
         const x = (e.clientX - rect.left) * dpr; const y = (e.clientY - rect.top) * dpr;
         bursts.push({x,y,r:10,vr:6,a:0.8});
       });
 
-      setSize(); init(); loop();
+      // subtle parallax with scroll
+      window.addEventListener('scroll', ()=>{
+        const max = Math.max(1, document.body.scrollHeight - innerHeight);
+        scrollYNorm = Math.min(1, Math.max(0, window.scrollY / max));
+      }, {passive:true});
+
+      setSize(); init(); last = performance.now(); loop(last);
+
       window.__toggleMotion = function(){
         motionEnabled = !motionEnabled;
         if(!motionEnabled){ cancelAnimationFrame(rafId); ctx.clearRect(0,0,w,h); }
-        else { loop(); }
+        else { last = performance.now(); loop(last); }
       };
+
+      // Respect system setting in real time
+      mq.addEventListener?.('change', (ev)=>{
+        motionEnabled = !ev.matches;
+        if(!motionEnabled){ cancelAnimationFrame(rafId); ctx.clearRect(0,0,w,h); }
+        else { setSize(); init(); last = performance.now(); loop(last); }
+      });
     })();
 
     // ===== Typewriter headline =====
@@ -722,7 +883,7 @@
       filters.addEventListener('click',(e)=>{
         const btn = e.target.closest('.filter'); if(!btn) return;
         document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));
-        btn.addEventListener && btn.classList.add('active');
+        btn.classList.add('active');
         apply();
       });
       let t; search?.addEventListener('input',()=>{ clearTimeout(t); t=setTimeout(apply, 120); });
@@ -746,24 +907,6 @@
         toast.textContent = 'Thanks! If needed, I’ll reply within 24 hours.';
         toast.classList.add('show');
         setTimeout(()=>toast.classList.remove('show'), 2400);
-      });
-    })();
-
-    // ===== Ripple on CTAs / buttons =====
-    (function(){
-      const els = document.querySelectorAll('.project a.cta, button[type="submit"]');
-      els.forEach(el => el.classList.add('ripple-parent'));
-      document.addEventListener('click', (e)=>{
-        const p = e.target.closest('.ripple-parent'); if(!p) return;
-        const r = p.getBoundingClientRect();
-        const d = Math.max(r.width, r.height);
-        const span = document.createElement('span');
-        span.className = 'ripple';
-        span.style.width = span.style.height = d + 'px';
-        span.style.left = (e.clientX - r.left - d/2) + 'px';
-        span.style.top  = (e.clientY - r.top  - d/2) + 'px';
-        p.appendChild(span);
-        span.addEventListener('animationend', ()=> span.remove());
       });
     })();
 
